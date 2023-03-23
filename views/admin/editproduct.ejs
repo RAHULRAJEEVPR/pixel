@@ -1,0 +1,187 @@
+<%- include('../layout/admin/header.ejs')%>
+<%- include('../layout/admin/navbar.ejs')%>
+<%- include('../layout/admin/sidebar.ejs')%>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+<main id="main" class="main">
+
+  
+
+
+  
+
+<section>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="text-center">Edit PRODUCT</h2>
+                <form id="productForm" action="" method="post" enctype="multipart/form-data">
+                  <label for="">Product Name</label>
+                  <input type="text" name="productname" class="form-control" required value="<%= product.productName %>">
+              
+                  <label for="">category</label>
+                  <select class="form-control" type="text" name="category" required >
+                      <option value="<%=product.category._id%>"><%=product.category.category%></option>
+                      <% Category.forEach((element,index) => {%>
+                      <option value="<%=element._id%>"><%=element.category%></option>
+                      <% });%>
+                  </select>
+              
+                  <label for="">Description</label>
+                  <input type="text" name="description" class="form-control" required value="<%= product.description %>">
+                        
+                  <label for="">Stock</label>
+                  <input type="number" name="stock" id="stock" class="form-control" required value="<%= product.stock %>">
+              
+                  <label for="">Price</label>
+                  <input type="number" name="price" id="price" class="form-control" required value="<%= product.price %>">
+              
+                  <div>
+                      <label for="">Image</label>
+                      <% product.image.forEach((element,index) => {%>
+                      <img src="/productimages/<%=element%>" alt="" width="50px" height="50px" >
+                      <% });%>
+                      <br> 
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Edit Image</button>
+              
+                  </div>
+              
+                  <button type="submit" class="btn btn-success mt-4">Submit</button> 
+                  <% if(typeof message !=="undefined") { %>
+                  <h1 style="font-size: 14px;color: brown;"><%=message  %></h1>
+                  <%} %>
+              </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+</main><!-- End #main -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Product Image</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <% product.image.forEach((element,i) => {%>
+        <div><img  style="width:50px;" src="/productimages/<%=element %>" alt=""><a style="background-color: rgb(150, 10, 10); color: azure;" class="btn btn-secondary ml-5"  href="/admin/productList/deleteImage/<%= product._id %>/<%=element %>"> Delete</a></div>
+        <% });%>
+  
+  
+       
+  
+        <div class="modal-body">
+  
+            <form action="/admin/productList/editImage/<%=product._id %>" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                </div>
+                <div class="form-group">
+                  <input type="file" multiple name="image" class="form-control form-control-line" onchange="viewImage(event)"> 
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <div class="image-preview-container">
+                  <div style="height: 50px; width: 70px; background-size: cover; background-position: center center;" class="image-preview"></div>
+<br>
+                  <div style="height: 50px; width: 70px; background-size: cover; background-position: center center;" class="image-preview"></div>
+
+                  <div style="height: 50px; width: 70px; background-size: cover; background-position: center center;" class="image-preview"></div>
+
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+  
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <script>
+    function viewImage(event) {
+        document.getElementsByClassName('image-preview').src = URL.createObjectURL(event.target.files[0]  )
+        document.getElementsByClassName('image-preview').src = URL.createObjectURL(event.target.files[1]  )
+        document.getElementsByClassName('image-preview').src = URL.createObjectURL(event.target.files[2]  )
+        // document.getElementById('imgView3').src = URL.createObjectURL(event.target.files[3]  )
+    }
+
+</script> -->
+<script>
+    function viewImage(event) {
+      var previews = document.getElementsByClassName('image-preview');
+      var files = event.target.files;
+      for (var i = 0; i < previews.length; i++) {
+        var preview = previews[i];
+        if (files[i]) {
+          preview.style.backgroundImage = "url('" + URL.createObjectURL(files[i]) + "')";
+        } else {
+          preview.style.backgroundImage = '';
+        }
+      }
+    }
+    </script>
+
+
+<script>
+  // Add event listener to the form submission event
+  const form = document.getElementById('productForm');
+  form.addEventListener('submit', (event) => {
+      // Prevent form submission
+      event.preventDefault();
+
+      // Get the form values
+      const productName = form.productname.value.trim();
+      const category = form.category.value.trim();
+      const description = form.description.value.trim();
+      const stock = parseInt(form.stock.value.trim());
+      const price = parseInt(form.price.value.trim());
+
+      // Perform validation checks
+      if (productName === ''||category === ''||description === '') {
+        
+          Swal.fire({
+                 title: 'all fields are required',
+                 text: 'please fill all fields',
+                 icon: 'warning',
+                 showConfirmButton: false
+	})
+          return;
+      }
+
+      
+
+      if (isNaN(stock) || stock < 1) {
+          
+          Swal.fire({
+                 title: 'Stock must be a number greater than or equal to 1.',
+                 
+                 icon: 'warning',
+                 showConfirmButton: false
+	})
+          return;
+      }
+
+      if (isNaN(price) || price < 1) {
+          
+          Swal.fire({
+                 title: 'Price must be a number greater than or equal to 1.',
+                 
+                 icon: 'warning',
+                 showConfirmButton: false
+	})
+          return;
+      }
+
+      // Submit the form
+      form.submit();
+  });
+</script>
+
+<%- include('../layout/admin/footer.ejs')%>

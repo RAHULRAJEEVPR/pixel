@@ -1,0 +1,69 @@
+<%- include('../layout/admin/header.ejs')%>
+<%- include('../layout/admin/navbar.ejs')%>
+<%- include('../layout/admin/sidebar.ejs')%>
+
+
+
+
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>USERS</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">USERS</li>
+      </ol>
+    </nav>
+  </div>
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">NAME</th>
+        <th scope="col">EMAIL</th>
+        <th scope="col">PHONE NO</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+        
+        
+      </tr>
+      
+    </thead>
+    <tbody>
+      <% user.forEach((element,i) => {%>
+        
+   
+        <tr>
+          <th scope="row"><%=i+1%></th>
+          <td><%=element.Name%></td>
+          <td><%=element.email%></td>
+          <td><%=element.number%></td>
+          
+        <% if(element.status==true){ %>
+          <td class="text-success">Active</td>
+          <td><button type="button" class="btn btn-outline-danger fw-bold"><a class="text-decoration-none text-black" href="/admin/userlist/action/<%=element._id%>"> Block</a></button> 
+           </td>
+         <% }else {%>
+          <td class="text-danger">Deactive</td>
+            <td><button type="button" class="btn btn-outline-warning fw-bold"><a class="text-decoration-none text-black" href="/admin/userlist/action/<%=element._id%>"> Unblock</a></button> 
+            </td>
+            <% } %>
+        </tr>
+     <% });%>
+
+    </tbody>
+  </table>
+
+
+          </table>
+    </div><!-- End Page Title -->
+
+
+  </main>
+
+
+
+
+  <%- include('../layout/admin/footer.ejs')%>

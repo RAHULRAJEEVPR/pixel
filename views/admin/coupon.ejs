@@ -1,0 +1,77 @@
+<%- include('../layout/admin/header.ejs')%>
+<%- include('../layout/admin/navbar.ejs')%>
+<%- include('../layout/admin/sidebar.ejs')%>
+
+
+
+
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>CATEGORY</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Coupon</li>
+      </ol>
+    </nav>
+  </div>
+  <div>
+   <button type="button" class="btn btn-dark"><a class="text-decoration-none text-white" href="/admin/coupon/addcoupon">Add Coupon</a></button>
+    
+  </div>
+
+
+  <table class="table reloadDiv">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Code</th>
+        <th scope="col">Expiry Date</th>
+        <th scope="col">MaxDiscount</th>
+        <th scope="col">MinPurchaseAmount</th>
+        <th scope="col">Percentage OFF</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <% coupon.forEach((element,i)=>{ %>
+   
+      <tr>
+        <th scope="row"><%= i+1 %></th>
+        <td><%= element.code %></td>
+        <td><%= element.expirationDate.toLocaleDateString('en-US', { year: '2-digit', month: '2-digit', day: '2-digit' }) %></td>
+
+        <td><%= element.maxDiscount %></td>
+        <td><%= element.MinPurchaseAmount%></td>
+        <td><%= element.percentageOff%></td>
+       
+        <td>
+          <!-- <button type="button" class="btn btn-outline-info fw-bold"><a class="text-decoration-none text-black" href=""> Edit</a></button>  -->
+         
+         
+         
+          <button type="button" class="btn btn-outline-danger fw-bold"><a class="text-decoration-none text-black" href="/admin/coupon/edit/<%= element._id%>"> Edit</a></button>
+         
+          <button type="button" class="btn btn-outline-danger fw-bold"><a class="text-decoration-none text-black" href="/admin/coupon/delete/<%= element._id%>"> Delete</a></button>
+         
+      
+        </td>
+       
+      </tr>
+   <% }) %>
+   
+    </tbody>
+  </table>
+
+
+
+
+  </main>
+
+
+
+  <%- include('../layout/admin/footer.ejs')%>
+
+  
+

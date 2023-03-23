@@ -1,0 +1,241 @@
+<%- include('../layout/user/header.ejs')%>
+<%- include('../layout/user/navbar.ejs')%>
+<%- include('../layout/user/subnav.ejs')%>
+
+
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- Product main img -->
+					<div class="col-md-5 col-md-push-2">
+						<div id="product-main-img">
+							<div class="product-preview">
+								<img src="/productimages/<%=productDetails.image[0]%>"  alt="">
+							</div>
+
+							<div class="product-preview">
+								<img src="/productimages/<%=productDetails.image[1]%>"  alt="">
+							</div>
+
+							<div class="product-preview">
+								<img src="/productimages/<%=productDetails.image[2]%>"  alt="">
+							</div>
+
+							
+						</div>
+					</div>
+					<!-- /Product main img -->
+
+					<!-- Product thumb imgs -->
+					<div class="col-md-2  col-md-pull-5">
+						<div id="product-imgs">
+							<div class="product-preview">
+								<img src="/productimages/<%=productDetails.image[0]%>"  alt="">
+							</div>
+
+							<div class="product-preview">
+								<img src="/productimages/<%=productDetails.image[1]%>" alt="">
+							</div>
+
+							<div class="product-preview">
+								<img src="/productimages/<%=productDetails.image[2]%>"  alt="">
+							</div>
+
+							<div class="product-preview">
+								<img src="/productimages/<%=productDetails.image[3]%>"  alt="">
+							</div>
+						</div>
+					</div>
+					<!-- /Product thumb imgs -->
+
+					<!-- Product details -->
+					<div class="col-md-5">
+						<div class="product-details">
+							<h2 class="product-name"><%=productDetails.productName%></h2>
+							<div>
+								<div class="product-rating">
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star-o"></i>
+								</div>
+								<!-- <a class="review-link" href="#">10 Review(s) | Add your review</a> -->
+							</div>
+							<div>
+								<h3 class="product-price"><%=productDetails.price%>
+                                     <!-- <del class="product-old-price">$990.00</del> -->
+                                    </h3>
+								<span class="product-available">Stock avilable <%=productDetails.stock%></span>
+							</div>
+							<p><%=productDetails.category.category%></p>
+
+							<!-- <div class="product-options">
+								<label>
+									Size
+									<select class="input-select">
+										<option value="0">X</option>
+									</select>
+								</label>
+								<label>
+									Color
+									<select class="input-select">
+										<option value="0">Red</option>
+									</select>
+								</label>
+							</div> -->
+
+							<div class="add-to-cart">
+								<!-- <div class="qty-label">
+									Qty
+									<div class="input-number">
+										<input type="number">
+										<span class="qty-up">+</span>
+										<span class="qty-down">-</span>
+									</div>
+								</div> -->
+							
+									<button type="button"  onclick="addTocart('<%=productDetails._id%>','<%=productDetails.stock%>')" class="add-to-cart-btn <%=productDetails._id%>">
+										<i class="fa fa-shopping-cart"></i><span class="<%=productDetails._id%>">add to cart</span> </button>
+								
+							</div>
+
+							<ul class="product-btns">
+								<div  onclick="addToWishlist('<%=productDetails._id%>')"><li><i id="<%=productDetails._id%>" class="fa fa-heart-o"></i> add to wishlist</li></div>
+							
+							</ul>
+
+							
+							
+						</div>
+					</div>
+					<!-- /Product details -->
+
+					<!-- Product tab -->
+					<div class="col-md-12">
+						<div id="product-tab">
+							<!-- product tab nav -->
+							<ul class="tab-nav">
+								<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+								
+							</ul>
+							<!-- /product tab nav -->
+
+							<!-- product tab content -->
+							<div class="tab-content">
+								<!-- tab1  -->
+								<div id="tab1" class="tab-pane fade in active">
+									<div class="row">
+										<div class="col-md-12">
+											<p><%=productDetails.description%></p>
+										</div>
+									</div>
+								</div>
+								<!-- /tab1  -->
+
+								<!-- tab2  -->
+								<!-- <div id="tab2" class="tab-pane fade in">
+									<div class="row">
+										<div class="col-md-12">
+											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+										</div>
+									</div>
+								</div> -->
+								<!-- /tab2  -->
+
+								<!-- tab3  -->
+								
+								<!-- /tab3  -->
+							</div>
+							<!-- /product tab content  -->
+						</div>
+					</div>
+					<!-- /product tab -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+
+		
+
+		<script>
+
+			function addToWishlist(proId){
+				$.ajax({
+		
+		url: '/addtowishlist',
+		data: {
+		  productId:proId
+		},
+		method: "post",
+		success: (response) => {
+		  console.log(response);
+		  document.getElementById(proId).style.color = "red";
+		  Swal.fire({
+                 title: 'Added to wishlist',
+                 text: 'success',
+                 icon: 'success',
+                 showConfirmButton: false
+		  })
+		
+		}
+		})
+			}
+
+
+
+			function addTocart(proId,stock){
+				if(stock<1){
+					Swal.fire({
+						 title: 'out of Stock!',
+						 
+						 icon: 'warning',
+						 showConfirmButton: false
+			 })	
+				}else{
+					$.ajax({
+				url:'/addtocart',
+				data:{
+					productId:proId
+				},
+				method: "post",
+				success: (response) => {
+		  console.log(response);
+		if(response.added){
+			document.getElementsByClassName(proId)[0].innerHTML = "Go To Cart";
+			Swal.fire({
+						 title: 'Added to Cart',
+						 text: 'success',
+						 icon: 'success',
+						 showConfirmButton: false
+			})
+		}else if(response.exists){
+			window.location = "/cart"; // Redirect to a new page
+		}
+		 
+		 
+		
+		}
+			})
+				}
+			
+		}
+		</script>
+				
+		
+
+		
+
+
+
+
+
+        <%- include('../layout/user/footernav.ejs')%>
+<%- include('../layout/user/footer.ejs')%>

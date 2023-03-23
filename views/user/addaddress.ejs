@@ -1,0 +1,144 @@
+
+<%- include('../layout/user/header.ejs')%>
+<!-- <link rel="stylesheet" href="/user/cart.css"> -->
+<%- include('../layout/user/navbar.ejs')%>
+
+
+
+
+
+
+
+
+
+
+<div class="container">
+    <div class="row gutters">
+   
+    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+    <div class="card h-100">
+        <div class="card-body">
+            <div class="row gutters">
+                <div class="col-xl-8">
+                    <h6 class="mb-2 text-primary">Address Details</h6>
+                </div>
+                <form action="" method="post" onsubmit="return validateForm()">
+
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="fullName">Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter House name "  name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">House Name</label>
+                        <input type="text" class="form-control" id="housename" placeholder="Enter House name "  name="housename">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="eMail">Street</label>
+                        <input type="text" class="form-control" id="street" name="street" placeholder="Enter street" >
+                    </div>
+                </div>
+                <div class="col-lg-6 ">
+                    <div class="form-group">
+                        <label for="phone">District</label>
+                        <input type="text" class="form-control" id="district" placeholder="Enter district"  name="district">
+                    </div>
+                </div>
+                <div class="col-lg-6 ">
+                    <div class="form-group">
+                        <label for="phone">State</label>
+                        <input type="text" class="form-control" id="state" placeholder="Enter state"  name="state">
+                    </div>
+                </div>
+                <div class="col-lg-6 ">
+                    <div class="form-group">
+                        <label for="phone">Pincode</label>
+                        <input type="text" class="form-control" id="pincode" placeholder="Enter pincode"  name="pincode">
+                    </div>
+                </div>
+                <div class="col-lg-6 ">
+                    <div class="form-group">
+                        <label for="phone">Country</label>
+                        <input type="text" class="form-control" id="country" placeholder="Enter country"  name="country">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone" placeholder="Enter phone number"  name="number">
+                    </div>
+                </div>
+             
+            </div>
+          
+            <div class="row gutters">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="text-right">
+                        <button type="button" id="submit"  class="btn btn-secondary"><a href="/userprofile/viewaddress/<%= user._id %>"> Cancel </a></button>
+                        <button type="submit" id="submit" name="submit" class="btn btn-primary" >ADD</button>
+                    </form>
+                     <% if(typeof message !=="undefined") { %>
+                        <h1 style="font-size: 14px;color: brown;"><%=message  %></h1>
+              <%} %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <script>
+        function validateForm() {
+            var name = document.getElementById("fullName").value.trim();
+var housename = document.getElementById("housename").value.trim();
+var street = document.getElementById("street").value.trim();
+var district = document.getElementById("district").value.trim();
+var state = document.getElementById("state").value.trim();
+var pincode = document.getElementById("pincode").value.trim();
+var country = document.getElementById("country").value.trim();
+var number = document.getElementById("phone").value.trim();
+
+      
+          if (name == "" || housename == "" || street == "" || district == "" || state == "" || pincode == "" || country == "" || number == "") {
+           
+            Swal.fire({
+                                icon: 'waring',
+                                title: 'All fields must be filled out',
+                               
+							})
+            return false;
+          }
+      
+          if (pincode.length != 6) {
+            
+            Swal.fire({
+                                icon: 'waring',
+                                title: 'Pincode must be 6 numbers',
+                               
+							})
+            
+            return false;
+          }
+      
+          if (number.length != 10) {
+            
+            Swal.fire({
+                                icon: 'waring',
+                                title: 'Phone number must be 10 numbers',
+                               
+							})
+            return false;
+          }
+      
+          return true;
+        }
+      </script>
+      
+      
+  <%- include('../layout/user/footernav.ejs')%>
+  <%- include('../layout/user/footer.ejs')%>

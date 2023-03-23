@@ -1,0 +1,133 @@
+<%- include('../layout/admin/header.ejs')%>
+<%- include('../layout/admin/navbar.ejs')%>
+<%- include('../layout/admin/sidebar.ejs')%>
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+ 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+         <div class="container py-5">
+                <div class="row">
+                    <div class="col">
+                        <nav aria-label="breadcrumb" class=" ">
+                            <ol class="breadcrumb mb-0">
+    
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <div class="card ml-1">
+                    <div class="card-body">
+                        <div class="container mb-5 mt-3">
+    
+    
+                            <div class="container ml-3">
+                                <div class="col-md-12">
+                                    <div class="text-center">
+                                        <i class="fab fa-mdb fa-4x ms-0" style="color:#5d9fc5 ;"></i>
+                                        <p class="pt-0">Sales Report</p>
+                                    </div>
+    
+                                </div>
+                                
+                                    <div class="col-xl-2">
+                                    <!-- <a class="btn btn-primary mb-2" href="/admin/dashboard">Dashboard</a> -->
+                                    </div>
+                           
+    
+                                    <div class="col-xl-2">
+                                        <a style="border: black;" class="btn btn-light" onclick="window.print()" >Print Report</a>
+                                        </div>
+                                        <div class="col-xl-2"> 
+                                        
+                                    </div>
+                                <div class="row my-2 mx-1 justify-content-center">
+                                    <table class="table table-striped table-borderless" id="saless">
+                                        <thead style="background-color:#84B0CA ;" class="text-white">
+                                    
+                                            <tr>
+    
+                                                <th scope="col">#</th>
+    
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Product Name</th>
+
+                                                <th scope="col">Qty</th>
+                                                <th scope="col">Single Price</th>
+                                                <th scope="col">Payment Method</th>
+                                                <th scope="col">Total Amount</th>
+                                              
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            <% for(let i=0;i<ss.length;i++){%>  
+                                            <tr>
+                                               <td><%=i+1%> </td> 
+                                       
+                                                <td><%=ss[i].date.toLocaleDateString()%></td>
+                                                <td>
+                                     <% ss[i].product.forEach((element)=>{%>
+                                        &#9679; <%=element.productId.productName%><br>
+                                   <%})   %>
+                                </td>   
+                                <td>
+                                    <% ss[i].product.forEach((element)=>{%>
+                                       &#9679; <%=element.quantity%><br>
+                                  <%})   %>
+                               </td>   
+                               <td>
+                                <% ss[i].product.forEach((element)=>{%>
+                                   &#9679; <%=element.singleTotal
+                                   %><br>
+                              <%})   %>
+                           </td>     
+                           <td><%=ss[i].paymentType%></td>             
+                                      <td><%=ss[i].total%></td>    
+                                      </tr>
+                                          
+                                        <%}%>
+                                  
+                                        </tbody>
+    
+                                    </table>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-xl-10">
+    
+                                    </div>
+    
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+
+
+
+
+                <script>
+                    $(document).ready( function () {
+                    $('#saless').DataTable();
+                } );
+                </script>
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+  </body>
+</html>
+
+<%- include('../layout/admin/footer.ejs')%>

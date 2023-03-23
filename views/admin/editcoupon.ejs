@@ -1,0 +1,76 @@
+<%- include('../layout/admin/header.ejs')%>
+<%- include('../layout/admin/navbar.ejs')%>
+<%- include('../layout/admin/sidebar.ejs')%>
+
+
+<main id="main" class="main">
+    <section>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="text-center">Edit Coupon</h2>
+                    <form action="" method="post" onsubmit="return validateForm()">
+                        <label for="category">Coupon code</label>
+                        <input type="text" id="code" name="code" class="form-control" value="<%= coupon.code %>" required>
+
+                        <label for="description">Expiry Date</label>
+                        <input type="date" id="expdate" name="expdate" class="form-control" value="<%= coupon.expirationDate %>" required>
+
+                        <label for="description">Maximum Discount</label>
+                        <input type="numebr" id="maxdiscount" name="maxdiscount" class="form-control" value="<%= coupon.maxDiscount%>" required>
+
+                    
+
+                        <label for="description">Minimum Purchase Amount</label>
+                        <input type="numebr" id="minpurchaseamount" name="minpurchaseamount" class="form-control" value="<%= coupon.MinPurchaseAmount%>" required>
+                        
+                        <label for="description">Percentage Off</label>
+                        <input type="numebr" id="percentageoff" name="percentageoff" class="form-control" value="<%= coupon.percentageOff %>" required>
+
+                        <input type="hidden" id="percentageoff" name="id" class="form-control" value="<%= coupon._id%>" >
+                       
+                        <button type="submit" class="btn btn-success mt-4">Submit</button> 
+
+                        <% if(typeof message !=="undefined") { %>
+                            <h1 style="font-size: 14px;color: brown;"><%=message  %></h1>
+                        <% } %>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+
+
+  
+  <script>
+  function validateForm() {
+    // get form field values
+    var code = document.getElementById("code").value.trim();
+    var expdate = document.getElementById("expdate").value.trim();
+    var maxdiscount = document.getElementById("maxdiscount").value.trim();
+    var minpurchaseamount = document.getElementById("minpurchaseamount").value.trim();
+    var percentageoff = document.getElementById("percentageoff").value.trim();
+    
+    // perform validation checks
+    if (code === '' || expdate === ''||maxdiscount === '' || minpurchaseamount === '' || percentageoff === ''  ) {
+        Swal.fire('space not counted')
+      return false;
+    }
+    
+    if(percentageoff<0 ||percentageoff>100){
+        Swal.fire('percentage should be between 0 to 100')
+      return false;
+    }
+    // additional validation checks here
+    
+    // if all checks pass, return true to submit the form
+    return true;
+  }
+  </script>
+  
+
+
+<%- include('../layout/admin/footer.ejs')%>

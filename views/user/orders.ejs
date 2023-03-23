@@ -1,0 +1,204 @@
+
+<%- include('../layout/user/header.ejs')%>
+<%- include('../layout/user/navbar.ejs')%>
+
+
+
+<% if (orders.length==0){%>
+    <div  style="align-content: center;">
+      <img class="center" src="https://cdni.iconscout.com/illustration/premium/thumb/empty-cart-2130356-1800917.png" alt="empty cart">
+      <h3 style="text-align:center ;"><i>Empty Order</i></h3>
+    </div>
+  <%}else{%>
+    <section class="h-100 gradient-custom">
+      <div class="container py-5" id="reloadDiv">
+        <div class="row">
+          <div class="col">
+            <nav aria-label="breadcrumb" class=" " >
+              <ol class="breadcrumb mb-0" style="background-color: rgb(255, 255, 255); border-radius: 0%;">
+                <div class="row">
+                    <div class="col">
+                      <h2 class="text-center mb-5 " >Order History</h2>
+                    </div>
+                  </div>
+              </ol>
+            </nav>
+          </div>
+        </div>
+  
+      <section style="background-color: #ffffff;">
+    <div class="container py-5" >
+        
+      <div class="row justify-content-center mb-3">
+        <div class="col-md-12 col-xl-10">
+          <div class="card shadow-0 border rounded-3"  id="orderpage">
+            <div class="card-body">
+              <% orders.forEach((element)=>{%>
+              
+                         
+              <div class="row">
+                <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                  <div class="bg-image hover-zoom ripple rounded ripple-surface ml-5">
+                    <% element.product.forEach((element1)=>{ %>
+                    <img src="/productimages/<%=element1.productId.image[0] %> "
+                    style="width: 100px;" />
+                      <%  }) %>
+                    <a href="#!">
+                      <div class="hover-overlay">
+                        <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-6">
+                 
+                  
+                    <% element.product.forEach((element1)=>{ %>
+                  <h5>  &#9679; <%=element1.productId.productName %>( <%=element1.quantity %> )</h5>
+                  <%  }) %>
+                  <div class="d-flex flex-row">
+                    <div class="text-danger mb-1 me-2">
+                     
+                    </div>
+                    <span></span>
+                  </div>
+                  <!-- <div class="mt-1 mb-0 text-muted small">
+                    <span>First Quality</span>
+                   
+                  </div>
+                  <div class="mb-2 text-muted small">
+                    <span>Unique design</span>
+                    
+                  </div> -->
+                  <p class="text-truncate mb-4 mb-md-0">
+                    <%=element.orderId %>
+                  </p>
+                </div>
+                <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                  <div class="d-flex flex-row align-items-center mb-1">
+                    <h4 class="mb-1 me-1">₹ <%=element.total %></h4>
+                    <h6 class="mb-1 me-1">Pay Method : <%=element.paymentType %></h6>
+                  </div>
+                  <h6 class="text-success">Free shipping</h6>
+                  <h6 class="text-info"><span id="<%=element._id %>"  ><%= element.status%></span></h6>
+                  <div class="d-flex flex-column mt-4">
+                    <button class="btn btn-info btn-sm mb-2" type="button"><a href="/userprofile/orders/orderDetails/<%=element._id %>">
+                      View Order</a>
+                     
+                    </button>
+                    <!-- <button class="btn btn-primary btn-sm" type="button"><span id="<%=element._id %>"  ><%= element.status%></span></button> -->
+                   
+                    <% if (element.status=="Delivered"){%>
+                      <% let checkDate=Date.now()%>
+                      <% if(checkDate<=element.returnDate){%>
+                        
+                      <button type="button" class="btn btn-danger  btn-sm mb-2" onclick="returnOrder('<%=element._id %>')">
+                        Return Order
+                      </button>
+                      <%}%>
+                    <%}else if(element.status!=="Payment failed" && element.status!=="cancelled" && element.status!=="Return requested" && element.status!=="Returned" ){%>
+                      <button class="btn btn-danger btn-sm mt-2"  onclick="cancelOrder('<%=element._id %>')" type="button">
+                        Cancel Order
+                      </button>
+                      <%}%>
+  
+                  </div>
+                </div>
+              </div>
+            <hr><hr>
+  
+    
+ 
+  <%}) %>  
+  </div>
+  </div>
+  </div>
+  </div>
+  
+  </div>
+  </div>
+  </section>
+  <% }%>
+
+
+  <script>
+
+function cancelOrder(orderId){
+    console.log(orderId)
+    Swal.fire({
+              title: 'Are you sure?',
+              text: "You wan't to cancel!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'yes, delete!'
+          }).then((result) => {
+                 if (result.isConfirmed) {
+
+  $.ajax({
+    url:'/usercancelorder',
+    data:{
+      id:orderId
+      
+    },
+    method:'post',
+    success:(response)=>{
+      Swal.fire({
+                 title: 'Canelled!',
+                 text: 'Your order Cancelled',
+                 icon: 'success',
+                 showConfirmButton: false
+             })
+      $('#reloadDiv').load('/userprofile/order/:id #reloadDiv')
+      console.log(response);
+
+    }
+  })
+
+}
+          })
+  
+  }
+
+
+function returnOrder(orderId){
+    Swal.fire({
+              title: 'Are you sure?',
+              text: "You wan't to return!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'yes, delete!'
+          }).then((result) => {
+                 if (result.isConfirmed) {
+
+  $.ajax({
+    url:'/userreturnorder',
+    data:{
+      id:orderId
+      
+    },
+    method:'post',
+    success:(response)=>{
+      Swal.fire({
+                 title: 'Return!',
+                 text: 'Your order Returned',
+                 icon: 'success',
+                 showConfirmButton: false
+             })
+      $('#reloadDiv').load('/userprofile/order/:id #reloadDiv')
+      console.log(response);
+
+    }
+  })
+
+}
+          })
+  }
+
+  </script>
+
+  <%- include('../layout/user/footernav.ejs')%>
+        <%- include('../layout/user/footer.ejs')%>

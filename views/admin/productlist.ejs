@@ -1,0 +1,64 @@
+<%- include('../layout/admin/header.ejs')%>
+<%- include('../layout/admin/navbar.ejs')%>
+<%- include('../layout/admin/sidebar.ejs')%>
+
+<main id="main" class="main">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="page-title">
+          <h1>PRODUCTS</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Products</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Product</th>
+                <th scope="col">Category</th>
+                <th scope="col">Description</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Price</th>
+                <th scope="col">Image</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% product.forEach((element,i) => {%>
+                <tr>
+                  <td><%=i+1%></td>
+                  <td><%=element.productName%></td>
+                  <td><%=element.category.category%></td>
+                  <td><%=element.description%></td>
+                  <td><%=element.stock%></td>
+                  <td><%=element.price%></td>
+                  <td><img  style="height: 100px;width: 150px;" src="/productimages/<%=element.image[0]%>" alt="" class="img-fluid"></td>
+                  <td>
+                    <div class="btn-group" role="group" aria-label="Product Actions">
+                      <button type="button" class="btn btn-outline-warning">
+                        <a class="text-decoration-none text-black" href="/admin/productList/editproduct/<%=element._id%>">Edit</a>
+                      </button>
+                      <button type="button" class="btn btn-outline-danger">
+                        <a class="text-decoration-none text-black" href="/admin/productList/productAction/<%=element._id%>">
+                          <% if(element.status){ %>Unlist<% }else{ %>List<% } %>
+                        </a>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              <% });%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../layout/admin/footer.ejs')%>

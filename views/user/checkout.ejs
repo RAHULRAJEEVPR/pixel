@@ -1,0 +1,534 @@
+
+		
+			<%- include('../layout/user/header.ejs')%>
+            <%- include('../layout/user/navbar.ejs')%>
+			<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-modal/2.2.6/js/bootstrap-modal.min.js"></script>
+
+
+
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<form id="checkout-form" >
+
+					<div class="col-md-7">
+						<!-- Billing Details -->
+
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Billing Name</h3>
+							</div>
+							  
+							<div class="form-group">
+								<input class="input" type="text" name="username" style="font-weight: bold;" value="<%=user.Name%>" readonly>
+							</div>
+							
+							
+						</div>
+
+						<div class="billing-details" id="myDiv">
+							<div class="section-title">
+								<h3 class="title">choose delivery address</h3>
+							</div>
+<!-- 							
+							<select class="form-control" type="text" name="address" required style="font-weight: 700;"> -->
+                        
+								<!-- <option style="font-weight: 700;">select delivery address</option> -->
+								<% user.address.forEach((element,index) => {%>
+								
+  
+									 
+									 
+									 <label>
+										<input id="address" type="radio" name="address" value="<%=element.name%>,<%=element.houseName%>,<%=element.street%>,<%=element.district%>,<%=element.state%>,<%=element.country%>,Phone:<%=element.phone%>" >
+										
+											
+											<%=element.name%>,<%=element.houseName%>,<%=element.street%>,
+											<%=element.district%>,<%=element.state%>,<%=element.country%>,Phone:<%=element.phone%>
+											
+										</label>
+									<br>
+
+									
+								<% });%>
+							<!-- </select> -->
+							
+							
+							
+							
+						</div>
+						<button type="button" class="btn btn-primary mt-2" data-toggle="modal"
+                                                    data-target="#exampleModalCenter">
+                                                    Add Address
+                                                </button>
+						<!-- /Billing Details -->
+
+						<!-- Shiping Details -->
+						<div class="shiping-details">
+					
+						</div>
+				
+					</div>
+
+					<!-- Order Details -->
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">Your Order</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>PRODUCT</strong></div>
+								<div><strong>TOTAL</strong></div>
+							</div>
+							<div class="order-products">
+								<%cart.products.forEach((x,i)=>{ %>
+								<div class="order-col">
+									<div><%=x.quantity%> x <%=x.productId.productName%></div>
+									<div><%=x.totalPrice%></div>
+									<input type="hidden" name="proId" value="<%= x.productId._id %>">
+										<input type="hidden" name="proQ" value="<%=x.quantity%>">
+										
+										<input type="hidden" name="qntyPrice"value="<%=x.totalPrice%>">
+								</div>
+								<% }) %>
+								
+							</div>
+							<div class="order-col">
+								<div>Shiping</div>
+								<div><strong>FREE</strong></div>
+							</div>
+							<div class="order-col">
+								<div><strong>SUB TOTAL</strong></div>
+								<div><span class="order-total"><%=cart.cartTotalPrice %></span>
+									<input type="hidden" name="subtotal" value="<%=cart.cartTotalPrice %>"></div>
+							</div>
+
+
+							<div class="order-col">
+								<div><strong> Discount</strong></div>
+								<div><strong id="discount" >0</strong></div>
+								<input id="discount1" name="discount1" type="hidden" value=""> 
+							</div>
+
+							<div class="order-col">
+								<div><input style="display: inline-block;  font-weight:500 ;"
+					 class="input" type="text" form="formCoupon"  name="code" id="NAMEcode" aria-describedby="helpId"
+					  placeholder="Enter coupon code" >
+					</div>
+								<div><button style="display: inline-block; "
+							type="button" class="primary-btn order-submit" 
+						onclick="applyCoupon('<%=cart.cartTotalPrice %>',$('#NAMEcode').val())">redeem</button></div>
+							</div>
+
+
+							<div class="order-col">
+								<div>Active coupons : </div><span style="color: rgb(255, 217, 0); font-weight: 700;">
+									<%coupon.forEach((x,i)=>{  %>
+									<%= x.code %>,
+									<% }) %>
+								
+								</span>
+							</div>
+
+
+
+
+							<input type="hidden" name="code" id="code" value=''>
+							<div class="order-col">
+								<div><strong>TOTAL</strong></div>
+								<div><strong class="order-total" id="total"><%= cart.cartTotalPrice %></strong>
+									<input type="hidden" name="cartTotal" id="total1" value="<%= cart.cartTotalPrice %>"></div>
+							</div>
+						</div>
+					
+						
+						<div class="payment-method">
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-1" value="cod">
+								<label for="payment-1">
+									<span></span>
+									COD
+								</label>
+								<div class="caption">
+									<!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> -->
+								</div>
+							</div>
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-2" value="upi">
+								<label for="payment-2">
+									<span></span>
+								Online Payment
+								</label>
+								<div class="caption">
+									
+								</div>
+							</div>
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-3" value="wallet" >
+								<label for="payment-3">
+									<span></span>
+									<input type="hidden" name="balance" value="<%=user.wallet%>">
+								Use Wallet    Bal : <%=user.wallet%>
+								</label>
+								<div class="caption">
+									
+								</div>
+							</div>
+							
+						</div>
+					
+							  
+							
+							
+							
+							
+						
+                        
+
+						<button type="submit" class="primary-btn order-submit">Place order</button>
+					</div>
+					<!-- /Order Details -->
+				</form>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+
+
+		<section>
+			<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		   <div class="modal-dialog modal-dialog-centered" role="document">
+			   <div class="modal-content">
+				   <div class="modal-header">
+					   <h4 class="modal-title" id="exampleModalLongTitle">Add Address</h4>
+					   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						   <span aria-hidden="true">&times;</span>
+					   </button>
+				   </div>
+				   <div class="modal-body">
+					   <form id="myForm">
+						   <div class="row">
+							   <div class="col-md-6">
+	   
+								   <div class="form-group">
+									   <label class="control-label">Name</label>
+									   <input type="text" name="name" class="form-control" />
+	   
+								   </div>
+	   
+							   </div>
+	   
+							   <div class="col-md-6">
+	   
+								   <div class="form-group">
+									   <label class="control-label">House Name</label>
+									   <input type="text" name="hname" class="form-control" />
+	   
+								   </div>
+	   
+							   </div>
+	   
+							   <div class="col-md-6">
+	   
+								   <div class="form-group">
+									   <label class="control-label">Street</label>
+									   <input type="text" name="street" class="form-control" />
+	   
+								   </div>
+	   
+							   </div>
+							   <div class="col-md-6">
+	   
+								   <div class="form-group">
+									   <label class="control-label">District</label>
+									   <input type="text" name="district" class="form-control" />
+	   
+								   </div>
+	   
+							   </div>
+						   </div>
+	   
+						   <div class="row">
+							   <div class="col-md-6">
+	   
+								   <div class="form-group">
+									   <label class="control-label">State</label>
+									   <input type="text" name="state" class="form-control datepicker" id="birthdayDate" />
+	   
+								   </div>
+	   
+							   </div>
+	   
+							   <div class="col-md-6">
+	   
+								   <div class="form-group">
+									   <label class="control-label">Country</label>
+									   <input type="text" name="country" class="form-control" />
+	   
+								   </div>
+	   
+							   </div>
+						   </div>
+	   
+	   
+						   <div class="row">
+							   <div class="col-md-6">
+	   
+								   <div class="form-group">
+									   <label class="control-label">pincode</label>
+									   <input type="Number" id="emailAddress" name="pincode" class="form-control" />
+	   
+								   </div>
+	   
+							   </div>
+							   <div class="col-md-6">
+	   
+								   <div class="form-group">
+									   <label class="control-label">Phone Number</label>
+									   <input type="Number" name="number" class="form-control" />
+	   
+								   </div>
+	   
+							   </div>
+						   </div>
+	   
+	   
+	   
+						   <div class="mt-4 pt-2">
+							   <button style="background-color: #000; color: aliceblue;"
+									   type="submit" class="btn btn-default">Submit</button>
+						   </div>
+	   
+					   </form>
+				   </div>
+				   <div class="modal-footer">
+	   
+				   </div>
+			   </div>
+		   </div>
+	   </div>
+	   
+        </section>
+
+
+
+	<script>
+
+function applyCoupon(total,code){
+	console.log(code)
+	console.log(total)
+ $.ajax({
+	url:'/applayCoupon',
+	data:{
+		total:total,
+		code:code
+	},
+	method:"post",
+	success:(response)=>{
+		console.log(response)
+		if (response.datefailed) {
+                            console.log("failed to match");
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Coupon Expired.',
+                            })
+         }else if (response.amountnokay) {
+                            console.log("pattilla");
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'To access this coupen buy something more than 1500rs.',
+
+                            })
+		}else if (response.amountokay) {
+                            console.log("vangaam")
+                            console.log("ooookayyy");
+                            document.getElementById('code').value = response.code
+                            document.getElementById('discount').innerHTML = response.discountValue
+                            document.getElementById('discount1').value = response.discountValue
+                            document.getElementById('total').innerHTML = response.value
+                            document.getElementById('total1').value = response.value
+                            Swal.fire(
+                                'Good job!',
+                                'Coupen granted!',
+                                'success'
+                            )
+                            
+
+        } else if (response.used) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Already Used.',
+                            })
+                        } else if (response.invalid) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Invalid Coupon.',
+                            })
+                        }
+
+
+	}
+ })
+}
+
+
+
+//..................................................
+
+		$('#checkout-form').submit((e)=>{
+			var formData = $(this).serialize();
+			console.log(formData)
+			console.log("hai")
+			e.preventDefault()
+			$.ajax({
+				url:'/placeorder',
+				method:'post',
+				data:$('#checkout-form').serialize(),
+				success:(response)=>{
+				
+			 // handle the response from the server
+			 console.log("yes")
+                        console.log(response);
+                        if (response.status) {
+                            location.href = '/success'
+                        } else if (response.radio) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Select Payment Method.',
+                            })
+                        }else if (response.wallet) {
+							Swal.fire({
+                                icon: 'error',
+                                title: 'insufficent wallet balance',
+                                text: 'try another payment method',
+							})
+
+                        } 
+						
+						
+						
+						else if (response.viewRazorpay) {
+							console.log(response.order) 
+                            razorpayPayment(response.order)
+
+                        }else if(response.address){
+							Swal.fire({
+                                icon: 'error',
+                                title: 'PLEASE SELECT ADDRESS',
+                               
+							})
+						}
+				}
+			})
+		})
+
+//razor....................
+function razorpayPayment(order) {
+	console.log(order)
+                var options = {
+                    "key": "rzp_test_gzE5gdNOR8R699", // Enter the Key ID generated from the Dashboard
+                    "amount":order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                    "currency": "INR",
+                    "name": "PiXEL", //your business name
+                    "description": "Test Transaction",
+                    "image": "https://example.com/your_logo",
+                    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                    "handler": function (response) {
+                        // alert(response.razorpay_payment_id);
+                        // alert(response.razorpay_order_id);
+                        // alert(response.razorpay_signature)
+
+                        verifyPayment(response,order)
+                    },
+                    "prefill": {
+                        "name": "RAHUL", //your customer's name
+                        "email": "rahulrajeevpr@gmail.com",
+                        "contact": "9000090000"
+                    },
+                    "notes": {
+                        "address": "Razorpay Corporate Office"
+                    },
+                    "theme": {
+                        "color": "#3399cc"
+                    }
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+
+            }
+
+
+
+
+function verifyPayment(payment,order){
+	console.log("chekka")
+	console.log(payment)
+	console.log("chekkaaaaaaaaaaaaaaa")
+	console.log(order)
+	$.ajax({
+		url:'/verify-payment',
+		data:{
+payment,
+order
+		},
+		method:"post",
+		success:(response)=>{
+			console.log("yes")
+                        console.log(response);	
+						if (response.status) {
+                            location.href = '/success'
+                        } 
+		
+	}
+	})
+}
+
+
+
+
+//...........................
+const form = $('#myForm')
+$('#myForm').submit(function (e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: '/checkoutAddAddress', // 
+                    type: 'POST', // use POST method
+                    data: formData,
+                    success: (response) => {
+                        // handle the response from the server
+                        console.log(response);
+						window.location.reload();
+                        // $('#exampleModalCenter').on('hidden.bs.modal', function () {
+                        //     $(this).find('form').trigger('reset');
+                        // });
+                        // $('#exampleModalCenter').modal('hide');
+                        // $('#myDiv').load('/cart/checkout #myDiv')
+                    },
+
+                });
+            });
+
+
+
+
+
+	</script>
+
+        <%- include('../layout/user/footernav.ejs')%>
+        <%- include('../layout/user/footer.ejs')%>

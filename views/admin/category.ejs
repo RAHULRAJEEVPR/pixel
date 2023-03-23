@@ -1,0 +1,119 @@
+<%- include('../layout/admin/header.ejs')%>
+<%- include('../layout/admin/navbar.ejs')%>
+<%- include('../layout/admin/sidebar.ejs')%>
+
+
+
+
+
+
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>CATEGORY</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Category</li>
+      </ol>
+    </nav>
+  </div>
+  <div>
+   <button type="button" class="btn btn-dark"><a class="text-decoration-none text-white" href="/admin/category/addcategory">Add Category</a></button>
+    
+  </div>
+
+
+  <table class="table reloadDiv">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Category</th>
+        <th scope="col">Description</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Category.forEach((element,index) => {%>
+        
+   
+      <tr>
+        <th scope="row"><%=index+1%></th>
+        <td><%=element.category%></td>
+        <td><%=element.description%></td>
+        <td>
+          <button type="button" class="btn btn-outline-info fw-bold"><a class="text-decoration-none text-black" href="/admin/category/editcategory/<%=element._id%>"> Edit</a></button> 
+         
+         
+         
+         
+         
+          <!-- <button type="button" class="btn btn-outline-danger fw-bold"><a class="text-decoration-none text-black" href="/admin/category/deletecategory/<%=element._id%>"> Delete</a></button> -->
+         
+         <% if(element.status){ %>
+          <button type="button" class="btn btn-outline-warning fw-bold"><a class="text-decoration-none text-black" href="/admin/category/actioncategory/<%=element._id%>"> unlist</a></button>
+          <!-- <button onclick="listAction('<%=element._id%>')" type="button" class="btn btn-outline-warning fw-bold">unlist</button> -->
+        <% }else{ %>
+          <button type="button" class="btn btn-outline-warning fw-bold"><a class="text-decoration-none text-black" href="/admin/category/actioncategory/<%=element._id%>"> list</a></button>
+          <% } %>
+        </td>
+       
+      </tr>
+   <% });%>
+   
+    </tbody>
+  </table>
+
+  <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button>
+    </div> -->
+    <!-- End Page Title -->
+
+
+  </main>
+
+<!-- Modal -->
+<!-- Modal -->
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+  
+<!-- <script>
+  function listAction(catId){
+console.log("hai")
+    $.ajax({
+      url:'/admin/category/listactioncategory',
+      data:{
+        catId:catId
+      },
+      method:'post',
+      success:(response)=>{
+        $('.reloadDiv').load('/admin/category/listactioncategory .reloadDiv')
+        console.log(response);
+
+      }
+    })
+  }
+ </script> -->
+
+
+
+  <%- include('../layout/admin/footer.ejs')%>
+
+  
+

@@ -1,0 +1,214 @@
+<%- include('../layout/user/header.ejs')%>
+<%- include('../layout/user/navbar.ejs')%>
+<%- include('../layout/user/subnav.ejs')%>
+
+
+
+		
+		
+
+
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container-fluid">
+				<!-- row -->
+				<div class="row">
+					<!-- ASIDE -->
+					<div id="aside" class="col-md-2" style="
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					flex-direction: column;
+				  " >
+						<!-- aside Widget -->
+						<div class="aside">
+							<h3 class="aside-title">Brands</h3>
+							<div class="checkbox-filter">
+
+							
+
+							
+
+								
+								<%categoryData.forEach((element,index)=>{%>
+								<div class="input-checkbox">
+									<input type="checkbox" id="category-6">
+									<label for="category-6">
+										
+										<a style="font-size: larger ; font-weight: bold;" href="/catview/<%=element._id%>"><%=element.category%></a>
+										
+									</label>
+								</div>
+								<% }) %>
+							</div>
+						</div>
+						<!-- /aside Widget -->
+
+				
+
+					
+
+						
+					</div>
+					<!-- /ASIDE -->
+
+					<!-- STORE -->
+					<div id="store" class="col-md-8">
+						<!-- store top filter -->
+						<% if(product.length<1){ %>
+							<div class="row" style="display: flex; flex-wrap: wrap;">
+								<img src="/productimages/no-product-found.png" alt="">
+							</div>
+
+					<%	}else{%>
+
+						<!-- store products -->
+						<div class="row" style="display: flex; flex-wrap: wrap;">
+							<!-- product -->
+							<% product.forEach((element,index)=>{  %>
+								<% if(element.status) {%>
+							<div class="col-md-4 col-xs-6">
+								
+								<div class="product">
+									<div class="product-img">
+									<img src="/productimages/<%=element.image[0]%>" alt="">
+										<div class="product-label">
+											<!-- <span class="sale">-30%</span>
+											<span class="new">NEW</span> -->
+										</div>
+									</div>
+									<div class="product-body">
+										<p class="product-category"><%=element.category.category%></p>
+										<h3 class="product-name"><a href="/productview/<%=element._id%>"><%=element.productName%></a></h3>
+										<h4 class="product-price"><%=element.price%> </h4>
+										<div class="product-rating">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="product-btns">
+											<button  onclick="addToWishlist('<%=element._id%>')" class="add-to-wishlist"><i  class="fa fa-heart-o"></i><span id="<%=element._id%>"  class="tooltipp">add to wishlist</span></button>
+											
+										</div>
+									</div>
+								
+										<div class="add-to-cart">
+											<button type="button"  onclick="addTocart('<%=element._id%>','<%=element.stock%>')" class="add-to-cart-btn <%=element._id%>"><i class="fa fa-shopping-cart"></i><span class="<%=element._id%>">add to cart</span> </button>
+					
+										</div>
+									</form>
+								</div>
+								
+							</div>
+							
+							<% } %>
+								<% }) %>
+								
+						</div>
+						<!-- /store products -->
+				<% } %>
+
+						<!-- store bottom filter -->
+						<div class="store-filter clearfix">
+							<% if(typeof countproducts!=='undefined' ){%>
+							<ul class="store-pagination">
+								<li><a  href="/catview/:id"><i class="fa fa-angle-left"></i></a></li>
+								<% for(let i=1;i<=countproducts;i++){ %>
+								<li ><a  href="?page=<%=i %>"><%=i %></a></li>
+								<% } %>
+								<li><a href="/catview/:id"><i class="fa fa-angle-right"></i></a></li>
+							</ul>
+						</div>
+						<%}%>
+						<!-- /store bottom filter -->
+					</div>
+					<!-- /STORE -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+		
+
+						
+
+								
+
+	
+		
+		<script>
+
+			function addToWishlist(proId){
+				$.ajax({
+		
+		url: '/addtowishlist',
+		data: {
+		  productId:proId
+		},
+		method: "post",
+		success: (response) => {
+		  console.log(response);
+		  document.getElementById(proId).style.color = "red";
+		 
+		
+		}
+		})
+			}
+		
+			function addTocart(proId,stock){
+		if(stock<1){
+			Swal.fire({
+                 title: 'out of Stock!',
+                 
+                 icon: 'warning',
+                 showConfirmButton: false
+	 })	
+		}else{
+			$.ajax({
+		url:'/addtocart',
+		data:{
+			productId:proId
+		},
+		method: "post",
+		success: (response) => {
+  console.log(response);
+if(response.added){
+	document.getElementsByClassName(proId)[0].innerHTML = "Go To Cart";
+	Swal.fire({
+                 title: 'Added to Cart',
+                 text: 'success',
+                 icon: 'success',
+                 showConfirmButton: false
+	})
+}else if(response.exists){
+	window.location = "/cart"; // Redirect to a new page
+}else if(response.nouser){
+	window.location = "/login";
+}
+ 
+ 
+
+}
+	})
+		}
+	
+}
+		</script>
+
+
+		
+
+	
+
+	
+
+
+
+<%- include('../layout/user/footernav.ejs')%>
+        <%- include('../layout/user/footer.ejs')%>

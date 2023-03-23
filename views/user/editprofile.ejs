@@ -1,0 +1,68 @@
+
+<%- include('../layout/user/header.ejs')%>
+<!-- <link rel="stylesheet" href="/user/cart.css"> -->
+<%- include('../layout/user/navbar.ejs')%>
+
+
+
+
+
+
+
+
+
+
+<div class="container">
+    <div class="row gutters">
+   
+    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+    <div class="card h-100">
+        <div class="card-body">
+            <div class="row gutters">
+                <div class="col-xl-8">
+                    <h6 class="mb-2 text-primary">Personal Details</h6>
+                </div>
+                <form action="" method="post">
+                <div class="col-xl-8">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter full name " value="<%=user.Name %>" name="name">
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    <div class="form-group">
+                        <label for="eMail">Email</label>
+                        <input type="email" class="form-control" id="eMail"  value="<%=user.email %>" readonly>
+                    </div>
+                </div>
+                <div class="col-xl-8 ">
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone" placeholder="Enter phone number" value="<%=user.number%>" name="number">
+                    </div>
+                </div>
+             
+            </div>
+          
+            <div class="row gutters">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="text-right">
+                        <button type="button" id="submit"  class="btn btn-secondary"><a href="/userprofile/<%= user._id %>"> Cancel </a></button>
+                        <button type="submit" id="submit" name="submit" class="btn btn-primary">Update</button>
+                    </form>
+                     <% if(typeof message !=="undefined") { %>
+                        <h1 style="font-size: 14px;color: brown;"><%=message  %></h1>
+              <%} %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+      
+  <%- include('../layout/user/footernav.ejs')%>
+  <%- include('../layout/user/footer.ejs')%>

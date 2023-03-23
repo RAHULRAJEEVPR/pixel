@@ -1,0 +1,23 @@
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <ul class="main-nav nav navbar-nav">
+                <li class=""><a href="/">Home</a></li>
+                 <li><a href="/products">All Products</a></li>
+               
+                 <%categoryData.forEach((element,index)=>{%>
+                 <li><a href="/catview/<%=element._id%>"><%=element.category%></a></li>
+                 <% });%>
+                 
+            </ul>
+        
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->

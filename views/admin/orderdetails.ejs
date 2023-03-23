@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    
+
+<div class="card ml-5" >
+    <div class="card-body">
+      <div class="container mb-5 mt-3">
+        <div class="row d-flex align-items-baseline">
+          <div class="col-xl-9">
+            <!-- <p style="color: #7e8d9f;font-size: 20px;">Invoice >> <strong></strong></p> -->
+          </div>
+          <div class="col-xl-3 float-end">
+            <button onclick="window.print();" class="btn btn-light text-capitalize border-0" data-mdb-ripple-color="dark"><i
+                class="fas fa-print text-primary"></i> Print</button>
+            <!-- <a class="btn btn-light text-capitalize" data-mdb-ripple-color="dark"><i
+                class="far fa-file-pdf text-danger"></i> Export</a> -->
+          </div>
+          <hr>
+        </div>
+  
+        <div class="container ml-5">
+          <div class="col-md-12">
+            <div class="text-center">
+              <i class="fab fa-mdb fa-4x ms-0" style="color:#5d9fc5 ;"></i>
+              <p class="pt-0">Order Details</p>
+            </div>
+  
+          </div>
+  
+  
+          <div class="row ">
+            <div class="col-xl-8">
+        
+            </div>
+            <div class="col-xl-4">
+              <p class="text-muted">Invoice</p>
+              <ul class="list-unstyled">
+                <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                    class="fw-bold">OrderId:</span><%= orderDetails.orderId%> </li>
+                <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                    class="fw-bold">order Date:<%= orderDetails.date.toLocaleString({ year: '2-digit', month: '2-digit' ,day: '2-digit'})%> </span> </li>
+                <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                    class="me-1 fw-bold">Status:</span><span class="badge bg-warning text-black fw-bold">
+                      <%= orderDetails.status%></span></li>
+              </ul>
+            </div>
+          </div>
+  
+          <div class="row my-2 mx-1 justify-content-center">
+            <table class="table table-striped table-borderless">
+              <thead style="background-color:#84B0CA ;" class="text-white">
+                <tr>
+                    
+                  <th scope="col">#</th>
+                 
+                  <th scope="col">Product Name</th>
+                  <th scope="col">Client</th>
+                  <th scope="col">Qty</th>
+                  <th scope="col">Payment Method</th>
+                  <th scope="col">Single Price</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col"> </th>
+                </tr>
+              </thead>
+              <tbody>
+               
+                <tr>
+                  <th scope="row"> #</th>
+                 
+                  <td>   <% orderDetails.product.forEach((element)=>{ %>
+                    &#9679; <%= element.productId.productName %><br>
+                      <% })%></td>
+                  <td> <%=orderDetails.userId.Name %></td>
+                  <td> <% orderDetails.product.forEach((element)=>{ %>
+                    &#9679; <%= element.quantity %><br>
+                      <%}) %></td>
+                      <td>  <%= orderDetails.paymentType%></td>
+                      <td> <% orderDetails.product.forEach((element)=>{ %>
+                        &#9679; <%= element.
+                        singleTotal %><br>
+                          <%}) %></td>
+                      <td>  <%= orderDetails.total %></td>
+                      <td>   <%=orderDetails.userId.phone %></td>
+                </tr>
+              
+              </tbody>
+  
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-xl-8">
+              <p class="ms-3">To:  <%= orderDetails.deliveryAddress %></p>
+  
+            </div>
+            <div class="col-xl-3">
+              <ul class="list-unstyled">
+
+                <li class="text-muted ms-3"><span class="text-black me-4">Discount:</span>
+                  <% if(orderDetails.discount==null){ %>
+                  0
+                  <%   }else{%>
+                  <%= orderDetails.discount%></li>
+                  <%   }%>
+                 
+
+              </ul>
+              <p class="text-black float-start"><span class="text-black me-3"> Total Amount</span><span
+                  style="font-size: 25px;"><%= orderDetails.total%></span></p>
+                 
+                </ul>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-xl-10">
+              <!-- <p>deliver</p> -->
+            </div>
+            <div class="col-xl-2">
+        <a class="btn btn-light" href="/admin/orders">Back to orders </a>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+ 
+
+   
+</body>
+</html>
+

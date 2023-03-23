@@ -1,0 +1,80 @@
+
+<%- include('../layout/user/header.ejs')%>
+<!-- <link rel="stylesheet" href="/user/cart.css"> -->
+<%- include('../layout/user/navbar.ejs')%>
+
+
+
+
+
+
+
+
+
+
+<div class="container">
+    <div class="row gutters">
+   
+    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+    <div class="card h-100">
+        <div class="card-body">
+            <div class="row gutters">
+                <div class="col-xl-8">
+                    <h1 class="mb-2 text-primary text-center">Change Password</h1>
+                </div>
+                <form id="change-password-form" action="" method="post" onsubmit="return validateForm()">
+
+                <div class="col-xl-8">
+                    <div class="form-group">
+                        <label for="fullName">Current Password</label>
+                        <input type="password" class="form-control" id="oldpass" placeholder="Enter currentpassword " value="" name="currentpassword">
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    <div class="form-group">
+                        <label for="eMail">New Password</label>
+                        <input type="password" class="form-control" id="newpass" placeholder="Enter new password"   value="" name="newpassword" >
+                    </div>
+                </div>
+              
+            </div>
+          
+            <div class="row gutters">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="text-right">
+                        <button type="button" id="submit"  class="btn btn-secondary"><a href="/userprofile/<%= user._id %>"> Cancel </a></button>
+                        <button type="submit" id="submit" name="submit" class="btn btn-primary">Update</button>
+                    </form>
+                     <% if(typeof message !=="undefined") { %>
+                        <h1 style="font-size: 14px;color: brown;"><%=message%></h1>
+              <%} %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+<script>
+    function validateForm() {
+        // Get the input values
+        const oldPassword = document.getElementById("oldpass").value.trim();
+        const newPassword = document.getElementById("newpass").value.trim();
+      
+        // Validate the input values
+        if (oldPassword === "" || newPassword === "") {
+          alert("Please fill in all fields.");
+          return false;
+        }
+        
+        // Submit the form
+        return true;
+      }
+    </script>
+        
+
+
+      
+  <%- include('../layout/user/footernav.ejs')%>
+  <%- include('../layout/user/footer.ejs')%>

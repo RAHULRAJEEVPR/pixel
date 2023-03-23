@@ -1,0 +1,57 @@
+<%- include('../layout/admin/header.ejs')%>
+<%- include('../layout/admin/navbar.ejs')%>
+<%- include('../layout/admin/sidebar.ejs')%>
+
+
+<main id="main" class="main">
+
+
+<section>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="text-center">Add PRODUCT</h2>
+                
+                <form action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+
+                    <label for="">Banner Name</label>
+                    <input id="name" type="text" name="name" class="form-control" required>
+
+                    
+
+                    <label for="">Image</label>
+                    <input multiple type="file" name="image" class="form-control" required>
+
+                     
+                    
+                    <button type="submit" class="btn btn-success mt-4">Submit</button> 
+                    <% if(typeof message !=="undefined") { %>
+                        <h1 style="font-size: 14px;color: brown;"><%=message  %></h1>
+              <%} %>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+</main><!-- End #main -->
+
+<script>
+    function validateForm() {
+        let name = document.getElementById("name").value;
+       
+        
+        
+        
+        if (name.trim() == "" || stock.trim() == "" ) {
+            Swal.fire('all fields are required')
+            return false;
+        }
+        
+     
+        
+        return true;
+    }
+    </script>
+
+<%- include('../layout/admin/footer.ejs')%>

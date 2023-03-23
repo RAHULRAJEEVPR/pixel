@@ -1,0 +1,98 @@
+
+<%- include('../layout/user/header.ejs')%>
+<!-- <link rel="stylesheet" href="/user/cart.css"> -->
+<%- include('../layout/user/navbar.ejs')%>
+
+
+
+
+
+
+
+
+
+
+<div class="container">
+    <div class="row gutters">
+   
+    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+    <div class="card h-100">
+        <div class="card-body">
+            <div class="row gutters">
+                <div class="col-xl-8">
+                    <h1 class="mb-2 text-primary text-center"> Edit Address</h1>
+                </div>
+                <% address.address.forEach((address)=>{ %>
+                <form action="" method="post">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="fullName">Name</label>
+                        <input type="text" class="form-control" id="fullName"  name="name" value="<%= address.name %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">House Name</label>
+                        <input type="text" class="form-control" id="fullName"   name="housename" value="<%= address.houseName %>">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="eMail">Street</label>
+                        <input type="text" class="form-control" id="eMail" name="street"  value="<%= address.street %>" >
+                    </div>
+                </div>
+                <div class="col-lg-6 ">
+                    <div class="form-group">
+                        <label for="phone">District</label>
+                        <input type="text" class="form-control" id="phone"   name="district" value="<%= address.district %>">
+                    </div>
+                </div>
+                <div class="col-lg-6 ">
+                    <div class="form-group">
+                        <label for="phone">State</label>
+                        <input type="text" class="form-control" id="phone"   name="state" value="<%= address.state%>">
+                    </div>
+                </div>
+                <div class="col-lg-6 ">
+                    <div class="form-group">
+                        <label for="phone">Pincode</label>
+                        <input type="text" class="form-control" id="phone"  name="pincode" value="<%= address.pincode%>">
+                    </div>
+                </div>
+                <div class="col-lg-6 ">
+                    <div class="form-group">
+                        <label for="phone">Country</label>
+                        <input type="text" class="form-control" id="phone"   name="country" value="<%= address.country%>">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone"   name="number" value="<%= address.phone%>">
+                    </div>
+                </div>
+             
+            </div>
+          
+            <div class="row gutters">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="text-right">
+                        <button type="button" id="submit"  class="btn btn-secondary"><a href="/userprofile/<%=user._id %>"> Cancel </a></button>
+                        <button type="submit" id="submit" name="submit" class="btn btn-primary">Update</button>
+                        <% }) %>
+                    </form>
+                     <% if(typeof message !=="undefined") { %>
+                        <h1 style="font-size: 14px;color: brown;"><%=message  %></h1>
+              <%} %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+      
+  <%- include('../layout/user/footernav.ejs')%>
+  <%- include('../layout/user/footer.ejs')%>

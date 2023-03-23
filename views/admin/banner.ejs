@@ -1,0 +1,106 @@
+<%- include('../layout/admin/header.ejs')%>
+<%- include('../layout/admin/navbar.ejs')%>
+<%- include('../layout/admin/sidebar.ejs')%>
+
+
+
+
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Banner</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Banner</li>
+      </ol>
+    </nav>
+  </div>
+  <div>
+   <button type="button" class="btn btn-dark"><a class="text-decoration-none text-white" href="/admin/banner/addbanner">Add banner</a></button>
+    
+  </div>
+
+
+  <table class="table reloadDiv">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Name</th>
+        <th scope="col">image</th>
+        <th scope="col">Action</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+     
+       
+   <% banner.forEach((element,i)=>{ %>
+     <tr>
+        <th scope="row"><%= i+1 %></th>
+        <td><%= element.name %></td>
+      
+
+        <td><img style="height: 50px; width: 90px;" src="/productimages/<%=element.image[0]%>" alt=""></td>
+       
+       
+        <td>
+          
+         
+         
+         
+          <button type="button" class="btn btn-outline-danger fw-bold"><a class="text-decoration-none text-black" href="/admin/banner/edit/<%=element._id%>"> Edit</a></button>
+         
+          <button type="button" class="btn btn-outline-danger fw-bold" onclick="confirmDelete('<%=element._id%>')"> Delete</button>
+         
+      
+        </td>
+       
+      </tr>
+  <% }) %>
+   
+    </tbody>
+  </table>
+
+
+
+
+  </main>
+
+  <script>
+ function confirmDelete(id) {
+    console.log("hai")
+      new swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover this banner!",
+          icon: "warning",
+          showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'yes, delete!'
+      })
+      .then((result) => {
+          if (result.isConfirmed) {
+              // If the user confirms the deletion, redirect to the delete route with the banner's ID
+              window.location.href = "/admin/banner/delete/" + id;
+              new swal({
+          title: "deleted",
+          text: "success",
+          icon: "success",
+          setTimeout:1000
+              })
+          }
+      });
+  }
+  
+
+  </script>
+
+ 
+
+
+
+  <%- include('../layout/admin/footer.ejs')%>
+
+  
+
