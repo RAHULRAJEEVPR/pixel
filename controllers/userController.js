@@ -4,14 +4,13 @@ const categoryModel = require("../model/categoryData");
 const Cart = require("../model/cartData");
 const bcrypt = require("bcrypt");
 const cartData = require("../model/cartData");
-const orderModel=require('../model/orderData')
-const bannerModel = require('../model/bannerData');
+const orderModel = require("../model/orderData");
+const bannerModel = require("../model/bannerData");
 require("dotenv").config();
 
 //password hashing
 const securePassword = async (password) => {
   try {
-   
     const passwordHash = await bcrypt.hash(password, 10);
     return passwordHash;
   } catch (error) {}
@@ -20,13 +19,25 @@ const securePassword = async (password) => {
 //loading user home page
 const loadUserHome = async (req, res) => {
   try {
-    const banner= await bannerModel.find({})
+    const banner = await bannerModel.find({});
 
-    const newProductData = await productModel.find({status:true}).sort({_id:-1}).limit(5).populate("category");
+    const newProductData = await productModel
+      .find({ status: true })
+      .sort({ _id: -1 })
+      .limit(5)
+      .populate("category");
     const categoryData = await categoryModel.find({ status: true });
-    const premium=await productModel.find({status:true}).sort({price:-1}).limit(5).populate("category");
-    const budget=await productModel.find({status:true}).sort({price:1}).limit(5).populate("category");
-    const bannerlink =await categoryModel.findOne({category:"SONY"})
+    const premium = await productModel
+      .find({ status: true })
+      .sort({ price: -1 })
+      .limit(5)
+      .populate("category");
+    const budget = await productModel
+      .find({ status: true })
+      .sort({ price: 1 })
+      .limit(5)
+      .populate("category");
+    const bannerlink = await categoryModel.findOne({ category: "SONY" });
     if (newProductData) {
       if (req.session.user_id) {
         session = req.session.user_id;
@@ -36,25 +47,25 @@ const loadUserHome = async (req, res) => {
           user: userData,
           product: newProductData,
           categoryData: categoryData,
-          banner:banner,
-          premium:premium,
-          budget:budget,
-          bannerlink:bannerlink
+          banner: banner,
+          premium: premium,
+          budget: budget,
+          bannerlink: bannerlink,
         });
       } else {
         res.render("userhome", {
           product: newProductData,
           categoryData: categoryData,
-          banner:banner,
-          premium:premium,
-          budget:budget,
-          bannerlink:bannerlink
+          banner: banner,
+          premium: premium,
+          budget: budget,
+          bannerlink: bannerlink,
         });
       }
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -64,7 +75,7 @@ const loadLogin = (req, res) => {
     res.render("userlogin");
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -93,14 +104,13 @@ const userLogin = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
 //..............................................
 
 //twlio...............
-
 
 const accountsid = process.env.TWILIO_ACCOUNT_SID;
 const authtoken = process.env.TWILIO_AUTH_TOKEN;
@@ -117,46 +127,41 @@ const loadSignup = (req, res) => {
     res.render("usersignup");
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
 //user signup post
 const userSignup = async (req, res) => {
-
-    try {
-      req.session.user = req.body;
-      const found = await userModel.findOne({ email: req.body.email });
-      if (found) {
-        res.render("usersignup", { message: "email already exist ,try another" });
-      } else if (
-        req.body.name == "" ||
-        req.body.email == "" ||
-        req.body.password == ""
-      ) {
-        res.render("usersignup", { message: "All fields are required" });
-      } else {
-        phonenumber = req.body.number;
-        const otpResponse = await client.verify.v2
-            .services("VA8add9ca93dd5317c04dac3f19513417d")
-            .verifications.create({
-              to: `+91${phonenumber}`,
-              channel: "sms",
-            });
-          res.render("otppage");
-
-        }
-      
-    } catch (error) {
-      console.log(error.message);
-      res.render('500')
+  try {
+    req.session.user = req.body;
+    const found = await userModel.findOne({ email: req.body.email });
+    if (found) {
+      res.render("usersignup", { message: "email already exist ,try another" });
+    } else if (
+      req.body.name == "" ||
+      req.body.email == "" ||
+      req.body.password == ""
+    ) {
+      res.render("usersignup", { message: "All fields are required" });
+    } else {
+      phonenumber = req.body.number;
+      const otpResponse = await client.verify.v2
+        .services("VA8add9ca93dd5317c04dac3f19513417d")
+        .verifications.create({
+          to: `+91${phonenumber}`,
+          channel: "sms",
+        });
+      res.render("otppage");
     }
- 
+  } catch (error) {
+    console.log(error.message);
+    res.render("500");
+  }
 };
 
 //otp verificaiton
 const verifyOtp = async (req, res, next) => {
-  
   try {
     const otp = req.body.otp;
     req.session.user;
@@ -186,8 +191,8 @@ const verifyOtp = async (req, res, next) => {
       res.render("otppage", { message: "invalid otp" });
     }
   } catch (error) {
-    console.log(error.message)
-    res.render('500')
+    console.log(error.message);
+    res.render("500");
   }
 };
 
@@ -198,7 +203,7 @@ const userLogout = async (req, res) => {
     res.redirect("/");
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -211,7 +216,7 @@ const userProfileLoader = async (req, res) => {
     res.render("userprofile", { user: userData });
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -224,7 +229,7 @@ const loadUserEdit = async (req, res) => {
     res.render("editprofile", { user: userData });
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -232,7 +237,6 @@ const loadUserEdit = async (req, res) => {
 const updateUserDetails = async (req, res) => {
   try {
     id = req.params.id;
-   
 
     userData = await userModel.findOneAndUpdate(
       { _id: id },
@@ -244,7 +248,7 @@ const updateUserDetails = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -253,10 +257,10 @@ const loadAddAddress = async (req, res) => {
   try {
     id = req.session.user_id;
     Data = await userModel.findOne({ _id: id });
-    res.render("addaddress",{user:Data});
+    res.render("addaddress", { user: Data });
   } catch (error) {
-    console.log(error.message)
-    res.render('500')
+    console.log(error.message);
+    res.render("500");
   }
 };
 
@@ -286,52 +290,51 @@ const addAddress = async (req, res) => {
     res.render("userprofile", { user: Data });
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
 //user all product load
-const loadAllProducts = async (req, res) =>{
+const loadAllProducts = async (req, res) => {
   try {
     let page = 1;
-    page=req.query.page
+    page = req.query.page;
     const limit = 6;
 
     const categoryData = await categoryModel.find({ status: true });
-    const allProduct = await productModel.find({status: true}).populate("category").limit(limit*1).skip((page-1)*limit).exec()
-    
+    const allProduct = await productModel
+      .find({ status: true })
+      .populate("category")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
 
     const Data = await userModel.findOne({ _id: req.session.user_id });
-    
 
-    const countproducts=await productModel.find({ status: true }).countDocuments()
-    let countdata=Math.ceil(countproducts/limit)
-
+    const countproducts = await productModel
+      .find({ status: true })
+      .countDocuments();
+    let countdata = Math.ceil(countproducts / limit);
 
     if (allProduct) {
-
-      if(Data){
+      if (Data) {
         res.render("allproduct", {
           product: allProduct,
           categoryData: categoryData,
           user: Data,
-          countproducts:countdata
+          countproducts: countdata,
         });
-      }else{
-
+      } else {
         res.render("allproduct", {
           product: allProduct,
           categoryData: categoryData,
-          countproducts:countdata
-         
+          countproducts: countdata,
         });
       }
-
-    
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -339,46 +342,45 @@ const loadAllProducts = async (req, res) =>{
 const loadbycategory = async (req, res) => {
   try {
     let page = 1;
-    page=req.query.page
+    page = req.query.page;
     const limit = 6;
-    
+
     const categoryData = await categoryModel.find({ status: true });
 
     catId = req.params.id;
     const allProduct = await productModel
-      .find({ category: catId,status: true })
-      .populate("category").limit(limit*1).skip((page-1)*limit).exec()
+      .find({ category: catId, status: true })
+      .populate("category")
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
 
     const Data = await userModel.findOne({ _id: req.session.user_id });
-    
-    const countproducts=await productModel.find({ category: catId,status: true}).countDocuments()
-    let countdata=Math.ceil(countproducts/limit)
-    
-    
-    
-    if (allProduct) {
 
-      if(Data){
+    const countproducts = await productModel
+      .find({ category: catId, status: true })
+      .countDocuments();
+    let countdata = Math.ceil(countproducts / limit);
+
+    if (allProduct) {
+      if (Data) {
         res.render("products", {
           product: allProduct,
           categoryData: categoryData,
           user: Data,
-          countproducts:countdata
+          countproducts: countdata,
         });
-      }else{
+      } else {
         res.render("products", {
           product: allProduct,
           categoryData: categoryData,
-          countproducts:countdata
-         
+          countproducts: countdata,
         });
       }
-
-   
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -388,11 +390,11 @@ const loadViewAddress = async (req, res) => {
     id = req.params.id;
 
     const Data = await userModel.findOne({ _id: req.session.user_id });
-    
+
     res.render("viewaddress", { user: Data });
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -410,12 +412,11 @@ const deleteAddress = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 //forgot password landing page
 const forgotPass = async (req, res) => {
-  
   try {
     res.render("forgotnumber");
   } catch (error) {}
@@ -423,12 +424,13 @@ const forgotPass = async (req, res) => {
 //forgot pass pass otp sent
 const forgotPassPost = async (req, res) => {
   try {
-   
     req.session.user = req.body;
-    const found = await userModel.findOne({ email: req.body.email,number:req.body.number });
+    const found = await userModel.findOne({
+      email: req.body.email,
+      number: req.body.number,
+    });
 
     if (found) {
-      
       phonenumber = req.body.number;
 
       const otpResponse = await client.verify.v2
@@ -445,7 +447,7 @@ const forgotPassPost = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 //forgot pass otp verification
@@ -469,7 +471,7 @@ const forgotChangePassopt = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 //settting new password
@@ -483,93 +485,98 @@ const forgotNewPass = async (req, res) => {
       { $set: { password: newpassword } }
     );
     if (userData) {
-      
       res.redirect("/login");
     }
   } catch (error) {
-    console.log(error.message)
-    res.render('500')
+    console.log(error.message);
+    res.render("500");
   }
 };
 //user password change page
-const changePass =async(req,res)=>{
+const changePass = async (req, res) => {
   try {
-    id=req.params.id
-    const user=await userModel.findOne({_id:id})
- res.render('changepass',{user})
+    id = req.params.id;
+    const user = await userModel.findOne({ _id: id });
+    res.render("changepass", { user });
   } catch (error) {
-    console.log(error.message)
-    res.render('500')
+    console.log(error.message);
+    res.render("500");
   }
-}
+};
 //user changeing password
-const updatePass=async(req,res)=>{
+const updatePass = async (req, res) => {
   try {
-    id=req.params.id
-    newpassword=req.body.newpassword
-    currentpassword=req.body.currentpassword
-   
-    const user=await userModel.findOne({_id:id})
-    if (bcrypt.compareSync(currentpassword, userData.password)){
-      newpassword= await securePassword(newpassword);
-     
-      const updated=await userModel.updateOne({_id:id},{$set:{password:newpassword}})
-      res.render('changepass',{user,message:"passsword changed"})
-    }else{
-      res.render('changepass',{user,message:"invalid current password"})
+    id = req.params.id;
+    newpassword = req.body.newpassword;
+    currentpassword = req.body.currentpassword;
+
+    const user = await userModel.findOne({ _id: id });
+    if (bcrypt.compareSync(currentpassword, userData.password)) {
+      newpassword = await securePassword(newpassword);
+
+      const updated = await userModel.updateOne(
+        { _id: id },
+        { $set: { password: newpassword } }
+      );
+      res.render("changepass", { user, message: "passsword changed" });
+    } else {
+      res.render("changepass", { user, message: "invalid current password" });
     }
   } catch (error) {
-    console.log(error.message)
-    res.render('500')
+    console.log(error.message);
+    res.render("500");
   }
-}
+};
 //user edit address page
-const editAddress=async(req,res)=>{
+const editAddress = async (req, res) => {
   try {
-    addressid=req.params.id
-    userId=req.session.user_id
-    
-    
-const user =await userModel.findOne({_id:userId})
-    const address=await userModel.findOne({_id:userId,'address._id':addressid},{'address.$': 1,_id:0})
-    if(user){
-      
-      
-      
-      res.render('editaddress',{address,user})
-    }
-    
-  } catch (error) {
-    console.log(error.message)
-    res.render('500')
-  }
+    addressid = req.params.id;
+    userId = req.session.user_id;
 
-}
+    const user = await userModel.findOne({ _id: userId });
+    const address = await userModel.findOne(
+      { _id: userId, "address._id": addressid },
+      { "address.$": 1, _id: 0 }
+    );
+    if (user) {
+      res.render("editaddress", { address, user });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.render("500");
+  }
+};
 //user updating address
-const updateAddress=async(req,res)=>{
+const updateAddress = async (req, res) => {
   try {
-    addressid=req.params.id
-    userId=req.session.user_id
-    const updated=await userModel.updateOne({_id:userId,'address._id':addressid},{$set:{"address.$" :{
-      name: req.body.name,
-      houseName: req.body.housename,
-      street: req.body.street,
-      district: req.body.district,
-      state: req.body.state,
-      pincode: req.body.pincode,
-      country: req.body.country,
-      phone: req.body.number,
-    }}})
-    if(updated){
-      res.redirect('/userprofile/viewaddress/:id')
+    addressid = req.params.id;
+    userId = req.session.user_id;
+    const updated = await userModel.updateOne(
+      { _id: userId, "address._id": addressid },
+      {
+        $set: {
+          "address.$": {
+            name: req.body.name,
+            houseName: req.body.housename,
+            street: req.body.street,
+            district: req.body.district,
+            state: req.body.state,
+            pincode: req.body.pincode,
+            country: req.body.country,
+            phone: req.body.number,
+          },
+        },
+      }
+    );
+    if (updated) {
+      res.redirect("/userprofile/viewaddress/:id");
     }
   } catch (error) {
-    console.log(error.message)
-    res.render('500')
-
+    console.log(error.message);
+    res.render("500");
   }
-}
- 
+};
+
 module.exports = {
   loadUserHome,
   loadLogin,
@@ -594,7 +601,5 @@ module.exports = {
   changePass,
   updatePass,
   editAddress,
-  updateAddress
- 
-  
+  updateAddress,
 };

@@ -22,7 +22,7 @@ const loadWishlist = async (req, res) => {
     });
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -50,13 +50,12 @@ const addWishlist = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 //wishlist to cart
 const wishToCart = async (req, res) => {
   try {
-
     userId = req.session.user_id;
     proId = req.body.proId;
     proPrice = req.body.proPrice;
@@ -85,7 +84,7 @@ const wishToCart = async (req, res) => {
           },
         }
       );
-    
+
       if (toCart) {
         let cart = await Cart.findOne({ userId }).populate(
           "products.productId"
@@ -135,7 +134,7 @@ const wishToCart = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -154,7 +153,7 @@ const deleteWish = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 

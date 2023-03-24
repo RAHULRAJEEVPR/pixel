@@ -1,7 +1,7 @@
 const couponModel = require("../model/couponData");
 const userModel = require("../model/userData");
 const productModel = require("../model/productData");
-const { findOne } = require("../model/userData");
+
 
 //admin coupon page load
 const loadCoupon = async (req, res) => {

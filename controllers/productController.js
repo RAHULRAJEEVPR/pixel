@@ -1,8 +1,8 @@
 const productModel = require("../model/productData");
 const categoryModel = require("../model/categoryData");
 const userModel = require("../model/userData");
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 // admin load all product
 const loadProduct = async (req, res) => {
   try {
@@ -10,7 +10,7 @@ const loadProduct = async (req, res) => {
     res.render("productlist", { product: productData });
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -21,7 +21,7 @@ const addProduct = async (req, res) => {
     res.render("addproduct", { Category: categoryData });
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -32,7 +32,7 @@ const insertProduct = async (req, res) => {
     for (var i = 0; i < req.files.length; i++) {
       imgArray.push(req.files[i].filename);
     }
-    
+
     let data = req.body.productname;
     let newProductName = data.toUpperCase();
 
@@ -46,12 +46,11 @@ const insertProduct = async (req, res) => {
     });
     const productData = await newProductDetails.save();
 
-   
     const categoryData = await categoryModel.find({});
     res.render("addproduct", { message: "success", Category: categoryData });
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -63,7 +62,7 @@ const deleteProduct = async (req, res) => {
     res.redirect("/admin/productList");
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -78,7 +77,7 @@ const editProduct = async (req, res) => {
     res.render("editproduct", { product: productData, Category: categoryData });
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 
@@ -91,7 +90,7 @@ const updateProduct = async (req, res) => {
     }
     if (imgArray != "") {
       id = req.params.id;
-      
+
       await productModel.updateOne(
         { _id: id },
         {
@@ -105,11 +104,11 @@ const updateProduct = async (req, res) => {
           },
         }
       );
-      
+
       res.redirect("/admin/productList");
     } else {
       id = req.params.id;
-     
+
       await productModel.updateOne(
         { _id: id },
         {
@@ -126,150 +125,144 @@ const updateProduct = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 //admin single image delete
-const deleteImage=async(req,res)=>{
+const deleteImage = async (req, res) => {
   try {
-    const imagedata = req.params.imgId
-    const proId = req.params.id
-    console.log(imagedata)
-    fs.unlink(path.join(__dirname, '../public/productimages', imagedata), () => { })
-  const pulled=await productModel.updateOne({_id:proId},{$pull:{image:imagedata}})
+    const imagedata = req.params.imgId;
+    const proId = req.params.id;
+    fs.unlink(
+      path.join(__dirname, "../public/productimages", imagedata),
+      () => {}
+    );
+    const pulled = await productModel.updateOne(
+      { _id: proId },
+      { $pull: { image: imagedata } }
+    );
 
-  res.redirect('/admin/productList/editproduct/' + proId)
+    res.redirect("/admin/productList/editproduct/" + proId);
   } catch (error) {
-    console.log(error.message)
-    res.render('500')
+    console.log(error.message);
+    res.render("500");
   }
-}
+};
 //admin image edit
-const editImage=async(req,res)=>{
+const editImage = async (req, res) => {
   try {
-    imagedata = req.files
-    
-    const proId = req.params.id
-    const images = [];
-    const len=imagedata.length
-    for(let i=0;i<len;i++){
-      const value=  await productModel.updateOne({ _id: proId }, { $push: { image:imagedata[i].filename } })
-    }
-      
-   
+    imagedata = req.files;
 
-    
-   
-    res.redirect('/admin/productList/editproduct/' + proId)
- 
+    const proId = req.params.id;
+    const images = [];
+    const len = imagedata.length;
+    for (let i = 0; i < len; i++) {
+      const value = await productModel.updateOne(
+        { _id: proId },
+        { $push: { image: imagedata[i].filename } }
+      );
+    }
+
+    res.redirect("/admin/productList/editproduct/" + proId);
   } catch (error) {
-    console.log(error.message)
-    res.render('500')
+    console.log(error.message);
+    res.render("500");
   }
-}
+};
 
 //userside
 
 //user product cateogry view
 const ProductView = async (req, res) => {
   try {
-const    id = req.params.id;
-   
- const   productData = await productModel.findOne({ _id: id }).populate("category")
-    const categoryData = await categoryModel.find({});
-if(req.session.user_id ){
-  const Data = await userModel.findOne({ _id: req.session.user_id });
-   
-   
-    res.render("productview", {
-      productDetails: productData,
-      categoryData: categoryData,
-      user:Data
-      
-    });
+    const id = req.params.id;
 
-  }else{
-   
-  
-    res.render("productview", {
-      productDetails: productData,
-      categoryData: categoryData,
-      
-    });
-  }
+    const productData = await productModel
+      .findOne({ _id: id })
+      .populate("category");
+    const categoryData = await categoryModel.find({});
+    if (req.session.user_id) {
+      const Data = await userModel.findOne({ _id: req.session.user_id });
+
+      res.render("productview", {
+        productDetails: productData,
+        categoryData: categoryData,
+        user: Data,
+      });
+    } else {
+      res.render("productview", {
+        productDetails: productData,
+        categoryData: categoryData,
+      });
+    }
   } catch (error) {
     console.log(error.message);
-    res.render('500')
+    res.render("500");
   }
 };
 //admin product list/unlist
-const productAction=async(req,res)=>{
-
+const productAction = async (req, res) => {
   try {
     const userId = req.session.user_id;
-    id=req.params.id
-  data=await productModel.findOne({_id:id})
-    if(data.status){
-      const productData=await productModel.updateOne({_id:id},{$set:{status:false}})
-    }else{
-      const productData=await productModel.updateOne({_id:id},{$set:{status:true}})
+    id = req.params.id;
+    data = await productModel.findOne({ _id: id });
+    if (data.status) {
+      const productData = await productModel.updateOne(
+        { _id: id },
+        { $set: { status: false } }
+      );
+    } else {
+      const productData = await productModel.updateOne(
+        { _id: id },
+        { $set: { status: true } }
+      );
     }
-    
-    res.redirect('/admin/productList')
+
+    res.redirect("/admin/productList");
   } catch (error) {
-    console.log(error.message)
-    res.render('500')
-    
+    console.log(error.message);
+    res.render("500");
   }
- 
-}
+};
 
 //user product search
-const search=async(req,res)=>{
-try {
-  const search=req.body.search
-  
+const search = async (req, res) => {
+  try {
+    const search = req.body.search;
 
-const result=new RegExp(search,'i')
+    const result = new RegExp(search, "i");
 
-// let page = 1;
-//  page=req.query.page
-// const limit = 6;
+    // let page = 1;
+    //  page=req.query.page
+    // const limit = 6;
 
-const proData=await productModel.find({productName:result,status:true})
-const Data = await userModel.findOne({ _id: req.session.user_id });
+    const proData = await productModel.find({
+      productName: result,
+      status: true,
+    });
+    const Data = await userModel.findOne({ _id: req.session.user_id });
 
-const categoryData = await categoryModel.find({ status: true });
-// const countproducts=await productModel.find({ status: true }).countDocuments()
+    const categoryData = await categoryModel.find({ status: true });
+    // const countproducts=await productModel.find({ status: true }).countDocuments()
     // let countdata=Math.ceil(countproducts/limit)
 
-if(Data){
-  res.render("allproduct", {
-    product: proData,
-    categoryData: categoryData,
-    user: Data,
-    
-  });
-}else{
-
-  res.render("allproduct", {
-    product: proData,
-    categoryData: categoryData,
-    
-   
-  });
-}
-
-} catch (error) {
-  console.log(error.message);
-  res.render('500')
-}
-}
-
-
-
-
-
+    if (Data) {
+      res.render("allproduct", {
+        product: proData,
+        categoryData: categoryData,
+        user: Data,
+      });
+    } else {
+      res.render("allproduct", {
+        product: proData,
+        categoryData: categoryData,
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.render("500");
+  }
+};
 
 module.exports = {
   loadProduct,
@@ -282,5 +275,5 @@ module.exports = {
   productAction,
   search,
   deleteImage,
-  editImage
+  editImage,
 };
