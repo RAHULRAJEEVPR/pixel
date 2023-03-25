@@ -54,12 +54,14 @@
 										<%product.forEach((element,index) => {%>
 											<% if(element.status) {%>
 										<div class="product">
-											<div class="product-img">
-											<img src="productimages/<%=element.image[0]%>" alt="">
+											
+													<div class="product-img">
+													<a href="/productview/<%=element._id%> "><img style="height: 100%; width: 100%;" src="productimages/<%=element.image[0]%>" alt=""></a>
 												<div class="product-label">
 													<!-- <span class="sale">-30%</span>
 													<span class="new">NEW</span> -->
 												</div>
+												
 											</div>
 											<div class="product-body">
 												<p class="product-category"><%=element.category.category%></p>
@@ -143,7 +145,7 @@
 										<%premium.forEach((element,index) => {%>
 										<div class="product">
 											<div class="product-img">
-												<img src="/productimages/<%=element.image[0]%>" alt="">
+												<a href="/productview/<%=element._id%> "><img style="height: 100%; width: 100%;" src="productimages/<%=element.image[0]%>" alt=""></a>
 											
 											</div>
 											<div class="product-body">
@@ -235,7 +237,7 @@
 										<%budget.forEach((element,index) => {%>
 										<div class="product">
 											<div class="product-img">
-												<img src="/productimages/<%=element.image[0]%>" alt="">
+												<a href="/productview/<%=element._id%> "><img style="height: 100%; width: 100%;" src="productimages/<%=element.image[0]%>" alt=""></a>
 											
 											</div>
 											<div class="product-body">
