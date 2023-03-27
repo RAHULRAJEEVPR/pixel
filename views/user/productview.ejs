@@ -45,9 +45,6 @@
 								<img src="/productimages/<%=productDetails.image[2]%>"  alt="">
 							</div>
 
-							<div class="product-preview">
-								<img src="/productimages/<%=productDetails.image[3]%>"  alt="">
-							</div>
 						</div>
 					</div>
 					<!-- /Product thumb imgs -->
@@ -70,7 +67,7 @@
 								<h3 class="product-price"><%=productDetails.price%>
                                      <!-- <del class="product-old-price">$990.00</del> -->
                                     </h3>
-								<span class="product-available">Stock avilable <%=productDetails.stock%></span>
+								<span class="product-available">Stock avilable : <%=productDetails.stock%></span>
 							</div>
 							<p><%=productDetails.category.category%></p>
 
@@ -218,7 +215,9 @@
 			})
 		}else if(response.exists){
 			window.location = "/cart"; // Redirect to a new page
-		}
+		}else if(response.nouser){
+	window.location = "/login";
+}
 		 
 		 
 		

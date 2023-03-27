@@ -116,7 +116,7 @@ const placeOrder = async (req, res) => {
       } else if (orders.payment == "wallet") {
         let status = "pending";
 
-        if (req.body.cartTotal > req.body.balance) {
+        if (req.body.cartTotal < req.body.balance) {
           res.json({ wallet: true });
         } else {
           let status = "confirmed";
@@ -359,6 +359,7 @@ const changeStatus = async (req, res) => {
         { orderId: orderId },
         { $set: { returnDate: dateAfter7Days } }
       );
+     
     }
 
     if (updated && newstatus === "Returned") {
