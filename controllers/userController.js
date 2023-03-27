@@ -348,6 +348,7 @@ const loadbycategory = async (req, res) => {
     const categoryData = await categoryModel.find({ status: true });
 
     catId = req.params.id;
+
     const allProduct = await productModel
       .find({ category: catId, status: true })
       .populate("category")
@@ -369,12 +370,14 @@ const loadbycategory = async (req, res) => {
           categoryData: categoryData,
           user: Data,
           countproducts: countdata,
+          catId
         });
       } else {
         res.render("products", {
           product: allProduct,
           categoryData: categoryData,
           countproducts: countdata,
+          catId
         });
       }
     }

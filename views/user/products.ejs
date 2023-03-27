@@ -116,11 +116,11 @@
 						<div class="store-filter clearfix">
 							<% if(typeof countproducts!=='undefined' ){%>
 							<ul class="store-pagination">
-								<li><a  href="/catview/:id"><i class="fa fa-angle-left"></i></a></li>
+								<li><a  href="/catview/<%= catId %>"><i class="fa fa-angle-left"></i></a></li>
 								<% for(let i=1;i<=countproducts;i++){ %>
 								<li ><a  href="?page=<%=i %>"><%=i %></a></li>
 								<% } %>
-								<li><a href="/catview/:id"><i class="fa fa-angle-right"></i></a></li>
+								<li><a href="/catview/<%= catId %>"><i class="fa fa-angle-right"></i></a></li>
 							</ul>
 						</div>
 						<%}%>
