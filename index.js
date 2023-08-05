@@ -1,6 +1,8 @@
 const mongoose =require('mongoose')
 require("dotenv").config();
-mongoose.connect(process.env.URL)
+mongoose.connect(process.env.URL) .then(() => {
+  console.log("DB connition sucessfull");
+})
 
 const express=require('express')
 const app=express()
